@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const path = require("path");
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
@@ -119,11 +120,23 @@ app.get("/api/admin/quotes", adminRequired, async (_req, res) => {
   return res.json({ items });
 });
 
-// Serve your Round 1 frontend (same HTML/CSS/JS) from this backend.
+// Root: always respond (works on Render when Frontend folder is not deployed)
+app.get("/", (_req, res) => {
+  res.type("text/plain").send("sw backend is running");
+});
+
+// Serve frontend only if that folder exists (repo layout: assignment/Frontend next to assignment/Backend)
 const frontendDir = path.resolve(__dirname, "..", "..", "Frontend");
-app.use(express.static(frontendDir));
-// Safe catch-all for static HTML pages (avoid '*' / '/*' wildcard issues in some router/path-to-regexp versions)
-app.get(/^\/(?!api\/).*/, (_req, res) => res.sendFile(path.join(frontendDir, "index.html")));
+const indexPath = path.join(frontendDir, "index.html");
+const frontendExists = fs.existsSync(indexPath);
+
+if (frontendExists) {
+  app.use(express.static(frontendDir));
+  // SPA fallback for client routes (not /api, not exact /)
+  app.get(/^\/(?!api\/).+/, (_req, res) => res.sendFile(indexPath));
+} else {
+  console.warn(`[server] Frontend not found at ${frontendDir} — API only`);
+}
 
 async function start() {
   const port = Number(process.env.PORT || 5001);
