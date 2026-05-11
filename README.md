@@ -30,15 +30,17 @@
 
 _Root `GET /` returns: `sw backend is running`_
 
-### Admin panel (with live GitHub Pages frontend)
-
 **Live frontend:** [https://nikky-kumar7505.github.io/SW-Technologies/](https://nikky-kumar7505.github.io/SW-Technologies/)
 
-1. Click **Login** in the navbar.  
-2. Use **`ADMIN_EMAIL`** and **`ADMIN_PASSWORD`** from **`Backend/.env`** (usually **lines 5–7**; defaults match `.env.example`: `admin@swtech.com` / `Admin@12345`).  
-3. After admin login, open **Admin** from the navbar or go to **`admin.html`**.
+### To access admin panel
 
-The admin user must exist in MongoDB (`npm run seed` in `Backend/` with those env values).
+1. Click **Login** in the navbar.  
+2. Use these credentials:
+
+| Field | Value |
+|--------|--------|
+| **Email** | `admin@swtech.com` |
+| **Password** | `Admin@12345` |
 
 </div>
 
